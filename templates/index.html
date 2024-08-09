@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folium Map and Plotly Chart</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #map-container, #plot-container {
+            width: 48%;
+            height: 100%;
+            padding: 10px;
+        }
+        #map-container iframe, #plot-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="map-container">
+        {{ folium_map|safe }}
+    </div>
+    <div id="plot-container">
+        <div id="plotly-chart"></div>
+    </div>
+    
+    <script>
+        var plotly_data = {{ plotly_json|safe }};
+        Plotly.newPlot('plotly-chart', plotly_data.data, plotly_data.layout);
+    </script>
+</body>
+</html>
