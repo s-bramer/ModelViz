@@ -1,0 +1,29 @@
+this is the structure of the program
+
+
+*Project Structure*
+#+name: tree
+#+begin_src ditaa
+  NODE
+  |
+  +-SAT.ctl                -SAT control file (written by script)
+  +-RUN_SAT_Vxxx.py        -SAT python script
+  |
+  +----MF
+  |    +----baseline       -recommended folder for MODFLOW input and output files from SAT baseline run
+  |    +----S0X            -SAT will create this: folder per scenario (if option 'keep') or single folder (if option 'overwrite')
+  |         +----input     -SAT will create scenario WEL file(s) here
+  |         +----output    -SAT scenario runs will store output here
+  |         +----work      -SAT will create scenario NAM in here (all other MF files copied from MF_work_files
+  |
+  +----MF_work_files       -contains: Template NAM file, MODFLOW executable + libraries, runScenario batch file
+  |
+  +----PP
+       +----headtime       -contains: executable (e.g. Gwlevels.exe) and template ctl file
+       +----flowtime       -contains: executable (e.g. strflowu.exe) and template ctl file
+       +----headspatial    -contains: executable (e.g. hedaview_v2.exe) and template ctl file
+       +----flowspatial    -contains: executable (e.g. streamxy_nopause.exe) and template ctl file
+       +----gwswtime       -contains: executable (e.g. strleak.exe) and template ctl file
+
+
+#+end_src

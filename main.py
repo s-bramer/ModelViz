@@ -21,7 +21,7 @@ def index():
     # Convert Plotly figure to JSON for rendering
     plotly_json = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
     
-    return render_template('index.html', folium_map=folium_map, plotly_json=plotly_json)
+    return render_template('index.html', folium_map=folium_map, plotly_json=plotly_json, title="Dashyboard")
 
 if __name__ == '__main__':
     app.run(debug=True)
