@@ -4,26 +4,47 @@ this is the structure of the program
 *Project Structure*
 #+name: tree
 #+begin_src ditaa
-  NODE
-  |
-  +-SAT.ctl                -SAT control file (written by script)
-  +-RUN_SAT_Vxxx.py        -SAT python script
-  |
-  +----MF
-  |    +----baseline       -recommended folder for MODFLOW input and output files from SAT baseline run
-  |    +----S0X            -SAT will create this: folder per scenario (if option 'keep') or single folder (if option 'overwrite')
-  |         +----input     -SAT will create scenario WEL file(s) here
-  |         +----output    -SAT scenario runs will store output here
-  |         +----work      -SAT will create scenario NAM in here (all other MF files copied from MF_work_files
-  |
-  +----MF_work_files       -contains: Template NAM file, MODFLOW executable + libraries, runScenario batch file
-  |
-  +----PP
-       +----headtime       -contains: executable (e.g. Gwlevels.exe) and template ctl file
-       +----flowtime       -contains: executable (e.g. strflowu.exe) and template ctl file
-       +----headspatial    -contains: executable (e.g. hedaview_v2.exe) and template ctl file
-       +----flowspatial    -contains: executable (e.g. streamxy_nopause.exe) and template ctl file
-       +----gwswtime       -contains: executable (e.g. strleak.exe) and template ctl file
-
+< PROJECT ROOT >
+   |
+   |-- apps/
+   |    |
+   |    |-- home/                           # A simple app that serve HTML files
+   |    |    |-- routes.py                  # Define app routes
+   |    |
+   |    |-- authentication/                 # Handles auth routes (login and register)
+   |    |    |-- routes.py                  # Define authentication routes
+   |    |    |-- models.py                  # Defines models
+   |    |    |-- forms.py                   # Define auth forms (login and register)
+   |    |
+   |    |-- static/
+   |    |    |-- <css, JS, images>          # CSS files, Javascripts files
+   |    |
+   |    |-- templates/                      # Templates used to render pages
+   |    |    |-- includes/                  # HTML chunks and components
+   |    |    |    |-- navigation.html       # Top menu component
+   |    |    |    |-- sidebar.html          # Sidebar component
+   |    |    |    |-- footer.html           # App Footer
+   |    |    |    |-- scripts.html          # Scripts common to all pages
+   |    |    |
+   |    |    |-- layouts/                   # Master pages
+   |    |    |    |-- base-fullscreen.html  # Used by Authentication pages
+   |    |    |    |-- base.html             # Used by common pages
+   |    |    |
+   |    |    |-- accounts/                  # Authentication pages
+   |    |    |    |-- login.html            # Login page
+   |    |    |    |-- register.html         # Register page
+   |    |    |
+   |    |    |-- home/                      # UI Kit Pages
+   |    |         |-- index.html            # Index page
+   |    |         |-- 404-page.html         # 404 page
+   |    |         |-- *.html                # All other pages
+   |    |
+   |  config.py                             # Set up the app
+   |    __init__.py                         # Initialize the app
+   |
+   |-- requirements.txt                     # App Dependencies
+   |
+   |-- .env                                 # Inject Configuration via Environment
+   |-- run.py                               # Start the app - WSGI gateway
 
 #+end_src
