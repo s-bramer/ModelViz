@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Manual{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('home.static', filename='assets/css/org.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('home.static', filename='assets/css/readtheorg.css') }}"/>
+{% endblock %}
+
+{% block content %}
+  <div id="content" class="content">
+      <h1 class="title">Scenario Assessment Tool (SAT)</h1>
+      <div id="table-of-contents">
+      <h2>Table of Contents</h2>
+      <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#org26e1d2e">1. Introduction</a></li>
+      <li><a href="#org1192d49">2. Idea</a></li>
+      <li><a href="#org7d664d9">3. Golden Paragraph</a></li>
+      <li><a href="#orgb19bd31">4. Methodology</a></li>
+      <li><a href="#orgd8d2bdc">5. How to SAT - quick manual</a>
+      <ul>
+      <li><a href="#orge6acdc9">5.1. Create the scenario spreadsheet</a></li>
+      <li><a href="#orgd823c0c">5.2. Create the folder structure</a></li>
+      <li><a href="#org60e5ff8">5.3. SETUP: Open GUI (SAT_GUI.py)</a></li>
+      <li><a href="#org7536903">5.4. RUN SAT</a></li>
+      </ul>
+      </li>
+      <li><a href="#org9004a7b">6. SAT run log</a>
+      <ul>
+      <li><a href="#org95c1eee">6.1. SSW WINEP NoDet desk study (3302 01916) - Oct2021</a></li>
+      <li><a href="#org63b25dd">6.2. Thames Water Modelling (3311 01512) - Jul2021 to Mar2023</a>
+      <ul>
+      <li><a href="#org43b530a">6.2.1. July 2021</a></li>
+      <li><a href="#orgdc63fe6">6.2.2. June 2021</a></li>
+      <li><a href="#orge5a181e">6.2.3. December 2022 - ongoing</a></li>
+      </ul>
+      </li>
+      <li><a href="#orgeb46b87">6.3. Cambridge Water WINEP (3302 01948) - Jan 2023</a></li>
+      <li><a href="#org1fa0b39">6.4. EYC Modelling (3302 02302) - Feb 2023</a></li>
+      </ul>
+      </li>
+      <li><a href="#orgdf489bb">7. <span class="todo TODO">TODO</span> Outstanding  <code>[6/14]</code></a></li>
+      </ul>
+      </div>
+      </div>
+      
+      <div id="outline-container-org26e1d2e" class="outline-2">
+      <h2 id="org26e1d2e"><span class="section-number-2">1</span> Introduction</h2>
+      <div class="outline-text-2" id="text-1">
+      <ul class="org-ul">
+      <li>Initially developed as Batched Abstraction Modelling (BAM) for the Environment Agency at Wood<br /></li>
+      <li>Re-written and enhanced into the Scenario Assessment Tool (SAT) at Stantec<br /></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-org1192d49" class="outline-2">
+      <h2 id="org1192d49"><span class="section-number-2">2</span> Idea</h2>
+      <div class="outline-text-2" id="text-2">
+      <blockquote>
+      <p>
+      "Innovate current groundwater modelling methodologies by combining Stantec’s modelling capabilities with the use of scientific programming. YAY!"<br />
+      </p>
+      </blockquote>
+      <ul class="org-ul">
+      <li>Create a flexible system that automates the setup and running of multiple model scenarios and compares them to a given baseline<br /></li>
+      <li>Unlike BAM, scenarios in SAT can contain specific abstraction rate changes (or switch-offs) and can include multiple abstractions per scenario<br /></li>
+      <li>see <a href="./doc/SAT_PQQ_doc.docx">PQQ document</a> for full context<br /></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-org7d664d9" class="outline-2">
+      <h2 id="org7d664d9"><span class="section-number-2">3</span> Golden Paragraph</h2>
+      <div class="outline-text-2" id="text-3">
+      <p>
+      "The SAT tool is designed to automate the setup, running and post-processing of multiple model scenarios which are subsequently compared to a given baseline. Model runs are automatically simulated in sequential order and can be run in parallel providing an efficient way to complete a great number of scenario runs in a short time. This approach also provides a more error proof process for model setup and processing as all steps are coded and simply repeated for each scenario thus assisting with and reducing the necessary post QA effort. The idea behind SAT is to innovate current groundwater modelling methodologies by combining Stantec’s modelling capabilities with the use of scientific programming."<br />
+      </p>
+      </div>
+      </div>
+      
+      <div id="outline-container-orgb19bd31" class="outline-2">
+      <h2 id="orgb19bd31"><span class="section-number-2">4</span> Methodology</h2>
+      <div class="outline-text-2" id="text-4">
+      <p>
+      In short:<br />
+      It keeps a list of abstractions scenarios (2 - see img below) on the server (master) to be accessed by each of the model machines processes (nodes).<br />
+      Each node will update a progress file (1 - see img below) on the server to keep track of which scenario is next.<br />
+      <a id="orgf19e67b"></a><br />
+      Basic workflow:<br />
+      </p>
+      <ol class="org-ol">
+      <li>Find the next scenario which needs running (from progress file)<br /></li>
+      <li>Gather abstraction information for that scenario (from scenario spreadsheet)<br /></li>
+      <li>Write the scenario WEL file (using those rates)<br /></li>
+      <li>Run the MODFLOW model scenario<br /></li>
+      <li>Extract the required post-processing output (for specified locations and time periods)<br /></li>
+      <li>Produce impact assessment data and figures (compare scenario and baseline)<br /></li>
+      <li>Report back to master process that current scenario is finished (progress file)<br /></li>
+      <li>Repeat the process<br /></li>
+      </ol>
+      
+      
+      <div id="orgfa2f4d4" class="figure">
+      <p><img src="img/BAM_i2.jpg" alt="BAM_i2.jpg" /><br />
+      </p>
+      <p><span class="figure-number">Figure 1: </span>SAT structure</p>
+      </div>
+      </div>
+      </div>
+      
+      <div id="outline-container-orgd8d2bdc" class="outline-2">
+      <h2 id="orgd8d2bdc"><span class="section-number-2">5</span> How to SAT - quick manual</h2>
+      <div class="outline-text-2" id="text-5">
+      <p>
+      How to set up and run SAT<br />
+      1st: Check you are using the <a href="./!latest_scripts">latest versions of the SAT python scripts</a>.<br />
+      <a id="org0c35621"></a><br />
+      </p>
+      </div>
+      <div id="outline-container-orge6acdc9" class="outline-3">
+      <h3 id="orge6acdc9"><span class="section-number-3">5.1</span> Create the scenario spreadsheet</h3>
+      <div class="outline-text-3" id="text-5-1">
+      <ul class="org-ul">
+      <li>This is a CSV file with the list of scenarios which lives on the server (all SAT nodes need access)<br /></li>
+      <li>Example spreadsheet and CSV are in the <a href="./master">the master folder</a><br /></li>
+      <li>Header comments of XLSX-file tell you what is needed<br /></li>
+      <li>When finished convert to CSV and provide link in setup (see <a href="#org77872c0">SETUP</a> below)<br /></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-orgd823c0c" class="outline-3">
+      <h3 id="orgd823c0c"><span class="section-number-3">5.2</span> Create the folder structure</h3>
+      <div class="outline-text-3" id="text-5-2">
+      <ul class="org-ul">
+      <li>Place SAT node folder structure (see diagram below) on the model machine of your choice - see example in <a href="./nodes">this folder</a><br />
+      <ul class="org-ul">
+      <li><code>.\MF\baseline</code> recommended (not required) place for all MODFLOW files from the baseline run (see <a href="#org77872c0">SETUP</a> below)<br /></li>
+      <li><code>.\MF\S..</code> will be created by SAT according to the run mode selection (keep/overwrite)<br /></li>
+      <li><code>.\MF_work_files</code> needs to include:<br />
+      <ul class="org-ul">
+      <li>MODFLOW template NAM file (used by SAT to create <code>SAT_scenario.nam</code>)<br />
+      <ul class="org-ul">
+      <li>SAT will take the first file with ending <code>.nam</code><br /></li>
+      <li>Should include valid paths to the model input files (these are unchanged in scenarios)<br />
+      <ul class="org-ul">
+      <li>NOTE: <code>SAT_scenario.nam</code> will live in <code>.\MF\Scenario\work</code> i.e. relative paths in template NAM need to be 3 additional folders below (..\..\..\)<br /></li>
+      <li>WEL file will be created in <code>.\MF\Scenario\input</code> and linked automatically in <code>SAT_scenario.nam</code><br /></li>
+      <li>all files going to <code>..\output</code> (check spelling/casing) will be named SAT_scenarioXXX.XXX<br /></li>
+      </ul></li>
+      </ul></li>
+      <li>MODFLOW executable and associated DDLs<br /></li>
+      <li><code>runScenario.bat</code> runs 1st MF and then the selected PP tools (needs to be created, see examples)<br /></li>
+      </ul></li>
+      <li><code>.\PP</code> Create a subfolder for each post-processing output needed (as selected in <a href="#org77872c0">SETUP</a>), containing executable and template control file, folder names must be:<br />
+      <ul class="org-ul">
+      <li><code>\PP\headtime</code> for GW head time-series<br /></li>
+      <li><code>\PP\flowtime</code> for SW flow time-series<br /></li>
+      <li><code>\PP\headspatial</code> for spatial heads plots (uses defined SPs - see <a href="#org77872c0">SETUP</a> below)<br /></li>
+      <li><code>\PP\flowspatial</code> for spatial flows plots (uses defined SPs - see <a href="#org77872c0">SETUP</a> below)<br /></li>
+      <li><code>\PP\gwswtime</code> for GW-SW time-series<br /></li>
+      </ul></li>
+      <li>Note: When creating template control files, don't forget the ever lurking 80 char limit (apparently a coding standard dating back to IBM's 1928! <a href="https://en.wikipedia.org/wiki/Punched_card#IBM_80_column_punched_card_formats_and_character_codes">punch card</a>) - use relative paths!<br /></li>
+      </ul></li>
+      </ul>
+      
+      <p>
+      <b>Node Folder Structure - Setup</b><br />
+      </p>
+      <div class="org-src-container">
+      <pre class="src src-ditaa" id="orgde1809c">NODE
+      |
+      +-SAT.ctl                -SAT control file (written by script)
+      +-RUN_SAT_Vxxx.py        -SAT python script
+      |
+      +----MF
+      |    +----baseline       -recommended folder for MODFLOW input and output files from SAT baseline run
+      |    +----S0X            -SAT will create this: folder per scenario (if option 'keep') or single folder (if option 'overwrite')
+      |         +----input     -SAT will create scenario WEL file(s) here
+      |         +----output    -SAT scenario runs will store output here
+      |         +----work      -SAT will create scenario NAM in here (all other MF files copied from MF_work_files
+      |
+      +----MF_work_files       -contains: Template NAM file, MODFLOW executable + libraries, runScenario batch file
+      |
+      +----PP
+           +----headtime       -contains: executable (e.g. Gwlevels.exe) and template ctl file
+           +----flowtime       -contains: executable (e.g. strflowu.exe) and template ctl file
+           +----headspatial    -contains: executable (e.g. hedaview_v2.exe) and template ctl file
+           +----flowspatial    -contains: executable (e.g. streamxy_nopause.exe) and template ctl file
+           +----gwswtime       -contains: executable (e.g. strleak.exe) and template ctl file
+      
+      
+      </pre>
+      </div>
+      <p>
+      <a id="org77872c0"></a><br />
+      </p>
+      </div>
+      </div>
+      <div id="outline-container-org60e5ff8" class="outline-3">
+      <h3 id="org60e5ff8"><span class="section-number-3">5.3</span> SETUP: Open GUI (SAT_GUI.py)</h3>
+      <div class="outline-text-3" id="text-5-3">
+      <p>
+      GUI provides tooltips on hover<br />
+      </p>
+      <ul class="org-ul">
+      <li>Run specification:<br />
+      <ul class="org-ul">
+      <li>Run type:<br />
+      <ul class="org-ul">
+      <li>Full run: Run MODFLOW scenarios as listed in scenario spreadsheet and selected post-processing<br /></li>
+      <li>Post-processing: Run only post-processing on the scenarios (assumes scenario output files already exist)<br /></li>
+      </ul></li>
+      <li>Number of scenarios:<br />
+      <ul class="org-ul">
+      <li>Type 'all' to run all scenarios listed in scenario spreadsheet<br /></li>
+      <li>Use single integer to run a specific scenario<br /></li>
+      <li>Use slice e.g. 2:5 to run a subset, in this case scenario 2 to 5<br /></li>
+      </ul></li>
+      </ul></li>
+      <li>Model specification<br />
+      <ul class="org-ul">
+      <li>SP/month: Used for WEL calculations (abstraction profile is repeated for each SP)<br /></li>
+      <li>Output SPs: For spatial heads/flows plots. This can be one SP or multiple (comma separate list)<br /></li>
+      </ul></li>
+      <li>Run mode<br />
+      <ul class="org-ul">
+      <li>Overwrite: SAT nodes only keep one output folder and overwrite former runs (after extracting post-processing results)<br /></li>
+      <li>Keep: SAT nodes create an output folder per scenario<br /></li>
+      </ul></li>
+      <li>Master Files (all SAT nodes need access to these)<br />
+      <ul class="org-ul">
+      <li>Scenario spreadsheet: CSV file as create <a href="#org0c35621">above</a><br /></li>
+      <li>Progress file: Scenario run record. Will be created by 1st node.<br /></li>
+      </ul></li>
+      <li>Baseline model file paths:<br />
+      <ul class="org-ul">
+      <li>Baseline model files are used as:<br />
+      <ul class="org-ul">
+      <li>WEL: starting point for scenario WEL files<br /></li>
+      <li>BAS, HDS, STR &amp; CS1: post-processing of scenario impact<br /></li>
+      </ul></li>
+      </ul></li>
+      <li>Select desired PP output and output folder paths<br />
+      <ul class="org-ul">
+      <li>check the boxes to select the PP you want<br /></li>
+      <li>define where you want the PP results to be saved<br /></li>
+      <li>SAT will create output folders for baseline, scenario and impact (difference) within those<br /></li>
+      </ul></li>
+      <li>Press <code>SAVE &amp; CLOSE</code> button to save settings to <code>SAT.ctl</code> (same folder)<br /></li>
+      <li>Settings are loaded automatically from <code>SAT.ctl</code> at start of GUI<br /></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-org7536903" class="outline-3">
+      <h3 id="org7536903"><span class="section-number-3">5.4</span> RUN SAT</h3>
+      <div class="outline-text-3" id="text-5-4">
+      <ul class="org-ul">
+      <li>Press <code>SAVE &amp; RUN</code> button to run this specific node to either:<br />
+      <ul class="org-ul">
+      <li>Start a new SAT run (will create a new progress file)<br /></li>
+      <li>Join an existing SAT run (if progress file already exists)<br /></li>
+      </ul></li>
+      <li>This will run the <a href="#orgf19e67b">SAT workflow</a> until all runs are done<br /></li>
+      </ul>
+      <p>
+      NOTES:<br />
+      </p>
+      <ul class="org-ul">
+      <li>Make sure to use the same MF executable for the SAT scenario run as used for SAT baseline run<br /></li>
+      <li>Check progress file (.PRG) at the end of the SAT run to see if all runs have been finished successfully<br /></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      <div id="outline-container-org9004a7b" class="outline-2">
+      <h2 id="org9004a7b"><span class="section-number-2">6</span> SAT run log</h2>
+      <div class="outline-text-2" id="text-6">
+      </div>
+      <div id="outline-container-org95c1eee" class="outline-3">
+      <h3 id="org95c1eee"><span class="section-number-3">6.1</span> SSW WINEP NoDet desk study (3302 01916) - Oct2021</h3>
+      <div class="outline-text-3" id="text-6-1">
+      <ul class="org-ul">
+      <li>AMP7 No Deterioration Desk Studies for South Staffordshire Water (SSW)<br /></li>
+      <li>GW Model: West Midlands Worfe (WMW)<br /></li>
+      <li>9 SAT scenarios<br /></li>
+      <li>SAT files archived in <a href="file:////gb1029-PPFSS01/cloud_archive/330201510/Models/WMW/SAT">this folder</a><br /></li>
+      <li>script used <code>Main_SAT_v0.02_looped_SSW.py</code><br /></li>
+      <li>Various bespoke changes to the code:<br />
+      <ul class="org-ul">
+      <li>had to introduce a well factor (1.02) as WMW increases all GWAbs by 2% to account for smaller licences not included in the model<br /></li>
+      <li>abs rate precision changed to 5 dec places to conform with WMW WEL file<br /></li>
+      <li>bespoke PP and MF nam file template hard-coded (change!)<br /></li>
+      </ul></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-org63b25dd" class="outline-3">
+      <h3 id="org63b25dd"><span class="section-number-3">6.2</span> Thames Water Modelling (3311 01512) - Jul2021 to Mar2023</h3>
+      <div class="outline-text-3" id="text-6-2">
+      <ul class="org-ul">
+      <li>GW Model: Cotswolds Model (CW)<br /></li>
+      </ul>
+      </div>
+      <div id="outline-container-org43b530a" class="outline-4">
+      <h4 id="org43b530a"><span class="section-number-4">6.2.1</span> July 2021</h4>
+      <div class="outline-text-4" id="text-6-2-1">
+      <ul class="org-ul">
+      <li>18 SAT scenarios (9 Summer/Winter drought permit scenarios) with individual and cumulative abs rate changes<br /></li>
+      <li>SAT setup archived in <a href="file:////gb1029-PPFSS01/cloud_archive/shared_projects/330201425/Models/SAT">this folder</a> and SAT node <a href="https://stantec.sharepoint.com/:f:/r/teams/331101512/Shared%20Documents/SAT%20archive?csf=1&amp;web=1&amp;e=vOwozu">on Sharepoint</a><br /></li>
+      <li>script used <code>Main_RAT_v0.01_looped_Thames.py</code><br /></li>
+      <li>Various bespoke changes to the code:<br />
+      <ul class="org-ul">
+      <li>bespoke PP and MF nam file template hard-coded (change!)<br /></li>
+      </ul></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-orgdc63fe6" class="outline-4">
+      <h4 id="orgdc63fe6"><span class="section-number-4">6.2.2</span> June 2021</h4>
+      <div class="outline-text-4" id="text-6-2-2">
+      <ul class="org-ul">
+      <li>RA baseline changed: Latton abs rated 17Ml/d<br /></li>
+      <li>11 more SAT scenarios (only Winter DP) with individual and cumulative abs rate changes<br /></li>
+      <li>SAT node <a href="https://stantec.sharepoint.com/:f:/r/teams/331101512/Shared%20Documents/SAT%20archive?csf=1&amp;web=1&amp;e=vOwozu">on Sharepoint</a><br /></li>
+      <li>script used <code>Main_SAT_v0.02_looped_Thames.py</code><br /></li>
+      <li>Various bespoke changes to the code:<br />
+      <ul class="org-ul">
+      <li>bespoke PP and MF nam file template hard-coded (change!)<br /></li>
+      <li>RAT = SAT<br /></li>
+      </ul></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-orge5a181e" class="outline-4">
+      <h4 id="orge5a181e"><span class="section-number-4">6.2.3</span> December 2022 - ongoing</h4>
+      <div class="outline-text-4" id="text-6-2-3">
+      <ul class="org-ul">
+      <li>SAT used marginally, mostly bespoke scripts<br /></li>
+      <li>involved 4 climate scenarios with 3 different abs scenarios (plus baseline i.e. total 16)<br /></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      <div id="outline-container-orgeb46b87" class="outline-3">
+      <h3 id="orgeb46b87"><span class="section-number-3">6.3</span> Cambridge Water WINEP (3302 01948) - Jan 2023</h3>
+      <div class="outline-text-3" id="text-6-3">
+      <ul class="org-ul">
+      <li>Westley headroom investigations<br /></li>
+      <li>step increase from RA to FL against various NDB and Future Predicted Scenarios<br /></li>
+      <li>GW Model: CBO<br /></li>
+      <li>18 scenarios<br /></li>
+      <li>SAT node on <a href="file:////Gb1029-ppfss01/workgroup/3302/active/330201948/GeoSciences/Models/CBO/MODFLOW/SAT">V drive</a><br /></li>
+      <li>script used <code>Run_SAT_v2.02_CBO.py</code><br />
+      <ul class="org-ul">
+      <li>new version with better integration, GUI for data input and no hard coding<br /></li>
+      </ul></li>
+      </ul>
+      </div>
+      </div>
+      <div id="outline-container-org1fa0b39" class="outline-3">
+      <h3 id="org1fa0b39"><span class="section-number-3">6.4</span> EYC Modelling (3302 02302) - Feb 2023</h3>
+      <div class="outline-text-3" id="text-6-4">
+      <ul class="org-ul">
+      <li>assessment of impact of individual groundwater abstractions on surface water flows<br /></li>
+      <li>GW Model: EYC<br /></li>
+      <li>292 scenarios (117 RA and 175 FL switch-offs)<br /></li>
+      <li>Also for 2 RA with FL rates - total scenarios ~600<br /></li>
+      <li>script used <code>Run_SAT_v2.03_CBO.py</code><br /></li>
+      <li>run on modelling machine and personal laptop parallel<br /></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      <div id="outline-container-orgdf489bb" class="outline-2">
+      <h2 id="orgdf489bb"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> Outstanding  <code>[6/14]</code></h2>
+      <div class="outline-text-2" id="text-7">
+      <ul class="org-ul">
+      <li class="on"><code>[X]</code> remove hard-coded BAS name/path from SAT<br /></li>
+      <li class="on"><code>[X]</code> write quick manual for SAT setup (folder structure, SAT prep and running)<br /></li>
+      <li class="on"><code>[X]</code> address progress file access conflicts in SAT code (lock file when openend)<br /></li>
+      <li class="on"><code>[X]</code> make SAT code more universally applicable (TS set to 3, PP dates hard-coded, etc.)<br /></li>
+      <li class="on"><code>[X]</code> SAT control file needs annotations<br /></li>
+      <li class="off"><code>[&#xa0;]</code> make paths to SAT files stored in control file relative (so SAT nodes can be copied anywhere and will work)<br /></li>
+      <li class="off"><code>[&#xa0;]</code> add a catch for broken runs into code, so they can be picked up later<br /></li>
+      <li class="on"><code>[X]</code> add option to instead of providing the total run number to work through to end of scenario list<br /></li>
+      <li class="off"><code>[&#xa0;]</code> ADD MORE ERROR CATCHING AND INPUT CHECKS<br /></li>
+      <li class="off"><code>[&#xa0;]</code> The formatting of the abstraction CSV matters, abs volumes need to be 'general' so python reads it as numbers.. needs a try/catch to check whether number or n/a<br /></li>
+      <li class="off"><code>[&#xa0;]</code> runScenario.bat needs to be created by user - MAKE IT AUTOMATIC!!!<br /></li>
+      <li class="off"><code>[&#xa0;]</code> copying the script and running multiple ones works for MF but not for PP (need separate PP folder per instance to avoid conflicts)<br /></li>
+      <li class="off"><code>[&#xa0;]</code> New SAT 2.0 is currently not comparing to a baseline (creating impact calcs) - add this in as an option<br /></li>
+      <li class="off"><code>[&#xa0;]</code> Fix RAT label on top of progress file<br /></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      <div id="postamble" class="status">
+      <p class="author">Author: Stefan Bramer</p>
+      <p class="date">Created: 2023-12-17 Sun 10:02</p>
+      <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+      </div>
+{% endblock %}

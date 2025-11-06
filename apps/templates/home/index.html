@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="resizable-container d-flex">
+    <!-- Map Column -->
+    <div class="map-column" id="map-column">
+        <div class="map-header">
+            <h5>Model Map</h5>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <!-- Draggable Divider -->
+    <div class="divider"></div>
+
+    <!-- Scrollable Content Column -->
+    <div class="content-column flex-grow-1 overflow-auto">
+        <!-- <div class="content p-3"> -->
+            <!-- <h5>Plots/Graphs 2.0</h5> -->
+            <div id="plot">
+              <script>
+                // plotData is passed from backend as JSON
+                var plotData = JSON.parse('{{ plot | safe }}');
+                // Create the plot
+                Plotly.newPlot('plot', plotData);
+              </script>
+            </div>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Similique incidunt laudantium ab nulla, est unde labore aut voluptate laborum eveniet!</p>
+            <div class="container mt-5">
+              <h2 class="mb-4">Data Table</h2>
+              <!-- Embed the table here -->
+              <div>
+                {{ table | safe }}
+              </div>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, inventore harum amet quod illum itaque sit, veritatis doloremque maxime reiciendis, eaque non recusandae ad. Cum cumque sunt, quos distinctio consequatur mollitia quod exercitationem voluptate doloribus veniam. Reiciendis minima ipsam, nulla rem, placeat assumenda earum voluptates doloremque libero omnis quaerat ad eius similique quis cupiditate. Assumenda, nisi fugit nemo eius ad cum eligendi doloremque mollitia, perferendis praesentium minus explicabo? Corporis laboriosam itaque, adipisci officia aut sequi nostrum culpa quos! Repudiandae, quas?</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, inventore harum amet quod illum itaque sit, veritatis doloremque maxime reiciendis, eaque non recusandae ad. Cum cumque sunt, quos distinctio consequatur mollitia quod exercitationem voluptate doloribus veniam. Reiciendis minima ipsam, nulla rem, placeat assumenda earum voluptates doloremque libero omnis quaerat ad eius similique quis cupiditate. Assumenda, nisi fugit nemo eius ad cum eligendi doloremque mollitia, perferendis praesentium minus explicabo? Corporis laboriosam itaque, adipisci officia aut sequi nostrum culpa quos! Repudiandae, quas?</p>
+            <!-- Add enough content to make the page scrollable -->
+        <!-- </div> -->
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('home.static', filename='assets/js/model_maps.js') }}"></script> 
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        // Initialize DataTables on the table with ID 'dataTable'
+        $('#dataTable').DataTable();
+    });
+  </script>
+{% endblock %}

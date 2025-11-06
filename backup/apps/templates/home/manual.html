@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Manual{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('home.static', filename='assets/css/org.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('home.static', filename='assets/css/readtheorg.css') }}"/>
+{% endblock %}
+
+{% block content %}
+<div class="container text-center main-content">
+  <div id="content" class="content">
+    <h1 class="title">ModelViz</h1>
+    <div id="table-of-contents" role="doc-toc">
+    <h2>Table of Contents</h2>
+    <div id="text-table-of-contents" role="doc-toc">
+    <ul>
+    <li><a href="#org4836e41">1. Introduction</a></li>
+    <li><a href="#org4ea745e">2. How to</a></li>
+    <li><a href="#org8aa1e34">3. FAQ</a></li>
+    </ul>
+    </div>
+    </div>
+    
+    <div id="outline-container-org4836e41" class="outline-2">
+    <h2 id="org4836e41"><span class="section-number-2">1.</span> Introduction</h2>
+    <div class="outline-text-2" id="text-1">
+    <p>
+    Lorem ipsum odor amet, consectetuer adipiscing elit. Habitant fusce proin nostra dapibus elit proin. Neque vivamus torquent pellentesque lacinia varius montes dis augue. Hac taciti feugiat rhoncus laoreet turpis ullamcorper. Non proin maximus nec aliquam enim eleifend conubia risus faucibus. Arcu tellus justo ligula himenaeos etiam. Donec ipsum ad eleifend neque lacinia gravida scelerisque. Ac hendrerit primis laoreet purus eleifend consequat. Curae fusce eros tincidunt litora, tortor convallis.<br />
+    </p>
+    </div>
+    </div>
+    
+    <div id="outline-container-org4ea745e" class="outline-2">
+    <h2 id="org4ea745e"><span class="section-number-2">2.</span> How to</h2>
+    <div class="outline-text-2" id="text-2">
+    <p>
+    Lorem ipsum odor amet, consectetuer adipiscing elit. Habitant fusce proin nostra dapibus elit proin. Neque vivamus torquent pellentesque lacinia varius montes dis augue. Hac taciti feugiat rhoncus laoreet turpis ullamcorper. Non proin maximus nec aliquam enim eleifend conubia risus faucibus. Arcu tellus justo ligula himenaeos etiam. Donec ipsum ad eleifend neque lacinia gravida scelerisque. Ac hendrerit primis laoreet purus eleifend consequat. Curae fusce eros tincidunt litora, tortor convallis.<br />
+    </p>
+    </div>
+    </div>
+    
+    <div id="outline-container-org8aa1e34" class="outline-2">
+    <h2 id="org8aa1e34"><span class="section-number-2">3.</span> FAQ</h2>
+    <div class="outline-text-2" id="text-3">
+    <ul class="org-ul">
+    <li>what?<br /></li>
+    <li>where?<br /></li>
+    <li>WHY?<br /></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    <div id="postamble" class="status">
+    <p class="author">Author: Stefan Bramer</p>
+    <p class="email">Email: <a href="mailto:sbramer@intera.com">sbramer@intera.com</a></p>
+    <p class="date">Created: 2024-08-12 Mon 13:46</p>
+    <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+    </div>
+  </div>
+  {% endblock %}

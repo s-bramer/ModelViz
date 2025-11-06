@@ -1,0 +1,206 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.container-fluid {
+    height: 100%;
+    /* display: flex; */
+}
+
+.page-header {
+    background-color: #0e4f59;
+    text-align: left; /* Center the headline on the page */
+    padding: 10px;
+}
+
+.page-headline {
+    font-size: 1.3rem;
+    color: #dedede;
+    /* font-weight: bold; */
+    display: flex;
+    /* align-items: left; */
+    justify-content: space-between;
+    margin: 0;
+
+}
+
+.headline-logo {
+    max-height: 30px; /* Adjust this to your logo's preferred size */
+}
+
+.sidebar {
+    width: 4.5rem;
+    background-color: #8e8b8b;
+    /* background-color: #333; */
+    /* background-color: white; */
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    position: fixed !important;
+    /* border-radius: 15px; */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start;
+}
+.sidebar-model-pages{
+    justify-content: space-between;
+}
+.sidebar-options{
+    margin-top: auto;/* Push the settings icon to the bottom */
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.5rem; /* Same as sidebar width */
+    width: 4.5rem; /* Ensures a square clickable area */
+}
+
+.nav-link img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.user-icon{
+    width: auto;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.sidebar-icon {
+    fill: whitesmoke;
+    width: 2rem;
+    height: 2rem;
+    transition: fill 0.4s ease;
+}
+
+.nav-link:hover .sidebar-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    fill: #ff6347; /* Change color on hover */
+}
+
+.main-content {
+    position:relative;
+    height: 100vh;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    /* overflow: hidden; */
+    margin-left: 72px; /* Offsets the main content by the width of the sidebar */
+    flex-grow: 1;
+}
+
+.resizable-container {
+    height: 100%;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+
+.map-header {
+    padding: 5px;
+    /* background-color: #f0f0f0; */
+    box-sizing: border-box;
+}
+.map-column {
+    width: 40%;
+    padding: 15px;
+    /* background-color: #f0f0f0; */
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box; /* Ensure padding is included in width/height */
+    flex-grow: 1;
+}
+
+#map {
+    height: calc(100% - 42px); /* reduced by height of map title*/
+    width: 100%;
+    background-color: #ccc;
+    box-sizing: border-box; /* Ensures the map respects the box model */
+}
+ 
+/* .leaflet-container {
+    height: 50% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+} */
+
+.divider {
+    width: 10px; /* Increased width to make it more obvious */
+    cursor: ew-resize;
+    background-color: #ddd; /* Base color for the divider */
+    position: relative;
+    z-index: 10;
+    padding-left: 2px; /* Padding on left */    
+    padding-right: 2px; /* Padding on right */
+}
+
+.divider:hover {
+    background-color: #bbb; /* Darker color on hover to make it more obvious */
+}
+
+.content-column {
+    width: 60%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #fff;
+    /* background-color: #f0f0f0; */
+    padding: 15px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+/* Adjust the size of the modebar */
+.modebar {
+    font-size: 14px !important;  /* Adjusts the overall font size */
+    height: 45px !important;     /* Adjusts the height of the modebar */
+    padding: 5px 10px !important; /* Adjusts padding inside the modebar */
+}
+
+/* Adjust the size of the plotly modebar buttons */
+.modebar-btn {
+    width: 20px !important;      /* Width of each button */
+    height: 20px !important;     /* Height of each button */
+    margin: 0 2px !important;    /* Space between buttons */
+    fill: black; */
+}
+
+/* Adjust the size of the plotly modebar buttons */
+.modebar-group {
+    background-color: transparent !important;
+}
+
+/* Adjust the size of the icons inside the buttons */
+.modebar-btn > svg {
+    width: 12px !important;      /* Width of the icon */
+    height: 12px !important;     /* Height of the icon */
+    /* background-color: transparent !important; */
+}
+
+.modebar-btn .icon path {
+    fill: #636363 !important;
+}
+
+/* Optionally change the color of the icons on hover */
+.modebar-btn:hover .icon path{
+    fill: #ff6347 !important; 
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}

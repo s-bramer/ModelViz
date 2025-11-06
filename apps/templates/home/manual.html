@@ -1,0 +1,7 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Manual{% endblock %}
+
+{% block content %}
+  <iframe src="{{ url_for('home.static', filename='assets/html/SAT_note.html') }}"></iframe>
+{% endblock %}

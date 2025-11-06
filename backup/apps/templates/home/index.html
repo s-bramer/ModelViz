@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container text-center main-content">
+  <div class="row align-items-start main-content">
+    <div class="col map-column main-content"> <!--Model Map col-->
+        <p>Model Map</p>
+        <div id="map"></div>
+    </div>
+    <div class="col"><!--Plots col-->
+        <p>Plots/Graphs</p>
+        <!-- <div id="plot"></div> -->
+        <div id="plot">
+          <script>
+              // Render the initial plot with the default data
+              var plotData = JSON.parse('{{ plot | safe }}');
+              Plotly.newPlot('plot', plotData.data, plotData.layout);
+          </script>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{{ url_for('home.static', filename='assets/js/map.js') }}"></script>
+{% endblock %}
